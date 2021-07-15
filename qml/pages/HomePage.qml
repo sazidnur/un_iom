@@ -27,18 +27,18 @@ Item {
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.rightMargin:{
-                if(homePageContent.width>1150) return 160
+                if(homePageContent.width>1300) return 160
                 else if(homePageContent.width>1000) return 130
                 else return 100
             }
 
             anchors.leftMargin: {
-                if(homePageContent.width>1150) return 160
+                if(homePageContent.width>1300) return 160
                 else if(homePageContent.width>1000) return 130
                 else return 100
             }
             anchors.topMargin: {
-                if(homePageContent.width>1150) return 65
+                if(homePageContent.width>1300) return 65
                 else if(homePageContent.width>1000) return 40
                 else return 30
             }
@@ -312,7 +312,7 @@ Item {
             anchors.rightMargin: 50
             anchors.leftMargin: 50
             anchors.topMargin: {
-                if(homePageContent.width>1150) return 30
+                if(homePageContent.width>1300) return 30
                 else if(homePageContent.width>1000) return 25
                 else return 20
             }
@@ -321,12 +321,12 @@ Item {
                 id: dashSearchGrid
                 anchors.fill: parent
                 anchors.rightMargin: {
-                    if(homePageContent.width>1150) return 130
+                    if(homePageContent.width>1300) return 130
                     else if(homePageContent.width>1000) return 100
                     else return 10
                 }
                 anchors.leftMargin: {
-                    if(homePageContent.width>1150) return 130
+                    if(homePageContent.width>1300) return 130
                     else if(homePageContent.width>1000) return 100
                     else return 10
                 }
@@ -362,27 +362,31 @@ Item {
 
         Rectangle {
             id: dashChartBg
-            Layout.maximumWidth: 1200
+            Layout.maximumWidth: 1100
             color: "#00000000"
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: searchBarBackground.bottom
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 10
+            anchors.bottomMargin: {
+                if(homePageContent.width>1300) return 125
+                else if(homePageContent.width>1000) return 60
+                else return 20
+            }
             anchors.topMargin: {
-                if(homePageContent.width>1150) return 125
-                else if(homePageContent.width>1000) return 90
+                if(homePageContent.width>1300) return 125
+                else if(homePageContent.width>1000) return 60
                 else return 30
             }
             anchors.rightMargin:{
-                if(homePageContent.width>1150) return 100
-                else if(homePageContent.width>1000) return 60
+                if(homePageContent.width>1300) return 160
+                else if(homePageContent.width>1000) return 75
                 else return 30
             }
 
             anchors.leftMargin: {
-                if(homePageContent.width>1150) return 100
-                else if(homePageContent.width>1000) return 60
+                if(homePageContent.width>1300) return 160
+                else if(homePageContent.width>1000) return 75
                 else return 30
             }
 
