@@ -8,12 +8,31 @@ from PySide2.QtQml import QQmlApplicationEngine
 from PySide2.QtCharts import QtCharts
 from PySide2 import QtCore, QtGui, QtWidgets, QtQml
 from PySide2.QtWidgets import *
+from PySide2.QtCore import QObject, Slot, Signal
 
+class MainWindow(QObject):
+    def __init__(self):
+        QObject.__init__(self)
+
+    setSearch = Signal(str)
+    setData = Signal(str)
+
+    @Slot(str)
+    def searchData(self, query):
+        self.setSearch.emit(query)
+
+    @Slot(str)
+    def excelTest(self, data):
+        self.setData.emit(data)
 
 if __name__ == "__main__":
 #    app = QGuiApplication(sys.argv)
     app = QApplication([])
     engine = QQmlApplicationEngine()
+
+    main = MainWindow()
+    engine.rootContext().setContextProperty("backend", main)
+
     app.setOrganizationName("UN IMO Bangladesh");
     app.setOrganizationDomain("un.com");
     app.setApplicationName("QPack");

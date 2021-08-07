@@ -334,7 +334,7 @@ Item {
                 columns: 3
 
                 CustomSearchBar{
-                    id: textField
+                    id: searchField
                     Layout.maximumWidth: 65535
                     placeholderText: "Search by id..."
                     Layout.fillWidth: true
@@ -354,7 +354,7 @@ Item {
                     Layout.preferredWidth: 50
                     Layout.preferredHeight: 40
                     onClicked: {
-                        backend.welcomeText(textField.text)
+                        backend.searchData(searchField.text)
                     }
                 }
             }
@@ -515,10 +515,17 @@ Item {
 
          }
      }
+    Connections{
+        target: backend
+
+        function onSetSearch(query){
+            midBoxdescription.text = query
+        }
+    }
 }
 
 /*##^##
 Designer {
-    D{i:0;autoSize:true;height:480;width:800}D{i:27}D{i:26}
+    D{i:0;autoSize:true;height:480;width:800}
 }
 ##^##*/

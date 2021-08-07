@@ -27,7 +27,6 @@ Item {
             border.color: "#808080"
             border.width: 1
             radius: 5
-
             property string hoveredBtn: "../../images/svg/folder (3).svg"
             property string noHoveredBtn: "../../images/svg/folder (5).svg"
             property bool isEntered: false
@@ -84,7 +83,7 @@ Item {
 
                 }
                 Text {
-                    id: name
+                    id: fileUploadLabel
                     color: "#808080"
                     text: qsTr("Click or drop file here")
                     anchors.bottom: parent.bottom
@@ -98,7 +97,7 @@ Item {
                     title: "Open excel file"
                     folder: shortcuts.home
                     selectMultiple: false
-                    nameFilters: ["Excel File (*.exl)"]
+                    nameFilters: ["Excel File (*.xlsx)"]
                     onAccepted: {
                         btnSaveExcel.visible = true
                         print("okay")
@@ -115,14 +114,37 @@ Item {
                         fileOpenBg.isEntered = false
                         btnSaveExcel.visible = true
                         print(drop.text)
+                        print("file dropped")
                     }
-
                     onEntered: {
-                        fileOpenBg.isEntered = true
+                        if(drag.urls.length>1){
+                            drag.accepted = false
+                            fileConfirmationText.showHideFileStatus(2)
+                            return
+                        }
+                        if(validateFileExtension(drag.urls[0]))
+                        {
+                            drag.accept()
+                            return // drag accepted
+                        }
+                        else{           //if not accepted (file type not matched)
+                            fileConfirmationText.showHideFileStatus(3)
+                            drag.accepted = false
+                        }
+
+//                        for(var i = 0; i < drag.urls.length; i++)
+//                        {
+                            //for multiple file
+//                        }
+
                     }
 
                     onExited: {
                         fileOpenBg.isEntered = false
+                    }
+
+                    function validateFileExtension(filePath){
+                        return filePath.split('.').pop() === "xlsx"
                     }
                 }
             }
@@ -154,7 +176,8 @@ Item {
             Layout.preferredHeight: 40
             onClicked: {
                 visible = false
-                fileConfirmationText.showHideFileStatus(false)
+                fileConfirmationText.showHideFileStatus(1)
+                backend.excelTest("file saved")
                 print("file saved")
             }
         }
@@ -183,9 +206,17 @@ Item {
                 duration: 3000 // turns to false after 3000 ms
             }
             function showHideFileStatus(flag){
-                if(flag){
+                if(flag===1){
                     text = qsTr("File saved successfully!")
                     color = "#13805A"
+                }
+                else if(flag===2){
+                    text = qsTr("Choose only one file!")
+                    color = "#FF5252"
+                }
+                else if(flag===3){
+                    text = qsTr("Only excel file allowed!")
+                    color = "#FF5252"
                 }
                 else{
                     text = qsTr("Can't save file!")
@@ -199,10 +230,17 @@ Item {
 
 
     }
+    Connections{
+        target: backend
+
+        function onSetData(data){
+            fileUploadLabel.text = data
+        }
+    }
 }
 
 /*##^##
 Designer {
-    D{i:0;autoSize:true;height:480;width:800}D{i:13}
+    D{i:0;autoSize:true;height:480;width:800}
 }
 ##^##*/
