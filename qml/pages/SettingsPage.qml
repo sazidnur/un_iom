@@ -7,10 +7,6 @@ import "../../js/QMLChartData.js" as ChartsData
 import "../../js/QChartJsTypes.js" as ChartTypes
 
 Item {
-    Hello{
-
-    }
-
     width: 800
     height: 480
 

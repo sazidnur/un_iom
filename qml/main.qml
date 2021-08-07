@@ -23,6 +23,14 @@ Window {
     //Property
     property int windowStatus: 0
     property int windowMargin: 10
+    property bool logoFlag: true
+    property string topRightText: {
+        if(btnHome.isActiveMenu) return "| HOME"
+        else if(btnLoadExcel.isActiveMenu) return "| LOAD EXCEL FILE"
+        else if(btnSetting.isActiveMenu) return "| SETTINGS"
+        else if(btnHistory.isActiveMenu) return "| HISTORY"
+        else if(btnAnalysis.isActiveMenu) return "| ANALYSIS"
+    }
 
 
     //Internal functions
@@ -122,7 +130,19 @@ Window {
 
                 ToggleButton{
                     btnColorClicked: "#add6ff"
-                    onClicked: animationMenu.running = true
+                    onClicked: {
+                        if(logoFlag){
+                            logoFlag = false
+                            logoHide.start()
+                            animationMenu.running = true
+                        }
+                        else{
+                            logoFlag = true
+                            logoShow.start()
+                            animationMenu.running = true
+                        }
+                    }
+
                 }
 
                 Rectangle {
@@ -155,7 +175,7 @@ Window {
                     Label {
                         id: topRightInfo
                         color: "#808080"
-                        text: qsTr("| HOME")
+                        text: topRightText
                         anchors.left: labelTopInfo.right
                         anchors.right: parent.right
                         anchors.top: parent.top
@@ -310,6 +330,9 @@ Window {
                             onClicked: {
                                 btnHome.isActiveMenu = true
                                 btnSetting.isActiveMenu = false
+                                btnAnalysis.isActiveMenu = false
+                                btnLoadExcel.isActiveMenu = false
+                                btnHistory.isActiveMenu = false
                                 stackView.push(Qt.resolvedUrl("pages/HomePage.qml"))
                             }
 
@@ -323,6 +346,13 @@ Window {
                             font.weight: Font.ExtraLight
                             font.pointSize: 10
                             btnIconSource: "../images/svg/resize_icon.svg"
+                            onClicked: {
+                                btnHome.isActiveMenu = false
+                                btnSetting.isActiveMenu = false
+                                btnAnalysis.isActiveMenu = true
+                                btnLoadExcel.isActiveMenu = false
+                                btnHistory.isActiveMenu = false
+                            }
                         }
 
                         LeftMenuBtn {
@@ -333,6 +363,14 @@ Window {
                             font.weight: Font.ExtraLight
                             font.pointSize: 10
                             btnIconSource: "../images/svg/open_icon.svg"
+                            onClicked: {
+                                btnHome.isActiveMenu = false
+                                btnSetting.isActiveMenu = false
+                                btnAnalysis.isActiveMenu = false
+                                btnLoadExcel.isActiveMenu = true
+                                btnHistory.isActiveMenu = false
+                                stackView.push(Qt.resolvedUrl("pages/LoadExcelFilePage.qml"))
+                            }
                         }
 
                         LeftMenuBtn {
@@ -343,6 +381,13 @@ Window {
                             font.weight: Font.ExtraLight
                             font.pointSize: 10
                             btnIconSource: "../images/svg/history.svg"
+                            onClicked: {
+                                btnHome.isActiveMenu = false
+                                btnSetting.isActiveMenu = false
+                                btnAnalysis.isActiveMenu = false
+                                btnLoadExcel.isActiveMenu = false
+                                btnHistory.isActiveMenu = true
+                            }
                         }
                     }
 
@@ -361,7 +406,40 @@ Window {
                         onClicked: {
                             btnHome.isActiveMenu = false
                             btnSetting.isActiveMenu = true
+                            btnAnalysis.isActiveMenu = false
+                            btnLoadExcel.isActiveMenu = false
+                            btnHistory.isActiveMenu = false
                             stackView.push(Qt.resolvedUrl("pages/SettingsPage.qml"))
+                        }
+                    }
+
+                    Image {
+                        id: logo
+                        width: 80
+                        height: 80
+                        visible: true
+                        anchors.left: parent.left
+                        anchors.bottom: btnSetting.top
+                        source: "../images/logo.png"
+                        anchors.leftMargin: 60
+                        anchors.bottomMargin: 5
+                        fillMode: Image.PreserveAspectFit
+
+                        PropertyAnimation {
+                            id: logoShow
+                            running: false
+                            to: true
+                            target: logo
+                            property: "visible"
+                            duration: 250
+                        }
+                        PropertyAnimation {
+                            id: logoHide
+//                            running: true
+                            to: false
+                            target: logo
+                            property: "visible"
+                            duration: 250
                         }
                     }
                 }

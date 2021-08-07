@@ -14,6 +14,9 @@ if __name__ == "__main__":
 #    app = QGuiApplication(sys.argv)
     app = QApplication([])
     engine = QQmlApplicationEngine()
+    app.setOrganizationName("UN IMO Bangladesh");
+    app.setOrganizationDomain("un.com");
+    app.setApplicationName("QPack");
 #    chart = QtCharts
 #    ff()
     engine.load(os.fspath(Path(__file__).resolve().parent / "qml/main.qml"))
