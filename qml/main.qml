@@ -3,7 +3,7 @@ import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.15
 import "controls"
- 
+
 
 Window {
     id: mainWindow
@@ -435,7 +435,7 @@ Window {
                         }
                         PropertyAnimation {
                             id: logoHide
-//                            running: true
+                            //                            running: true
                             to: false
                             target: logo
                             property: "visible"
@@ -465,7 +465,69 @@ Window {
                 }
 
                 Rectangle {
-                    id: rectangle
+                    id: notificationBar
+                    width: 250
+                    height: 45
+                    visible: false
+                    color: "#72b58d"
+                    radius: 5
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 35
+                    anchors.rightMargin: 10
+                    z: 1
+                    layer.enabled: true
+                    layer.effect: DropShadow {
+                        transparentBorder: true
+                        horizontalOffset: 0
+                        verticalOffset: 0
+                        radius: 10
+                        samples: 21
+                        color: "#66000000"
+                    }
+
+
+                    PropertyAnimation {
+                        id: showNotification
+                        target: notificationBar
+                        to: {if(notificationBar.visible) return false; else return true;}
+                        duration: 3000
+                        property: "visible"
+                        easing: Easing.OutBounce
+                    }
+
+                    Text {
+                        id: notificationText
+                        color: "#ffffff"
+                        text: qsTr("Notification Text")
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pixelSize: 13
+                        font.italic: true
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    function callNotification(notificationColor, text){
+                        notificationBar.color = notificationColor
+                        notificationText.text = text
+                        notificationBar.visible = true
+                        showNotification.start()
+                    }
+
+//                    DropShadow{
+//                        id: notificationBarShadow
+//                        horizontalOffset: 0
+//                        verticalOffset: 0
+//                        radius: 5
+//                        anchors.fill: parent
+//                        samples: 11
+//                        color: "#80000000"
+//                        source: parent
+//                        spread: 0
+//                    }
+                }
+
+                Rectangle {
+                    id: bottomBar
                     color: "#eaf4ff"
                     anchors.left: leftMenu.right
                     anchors.right: parent.right
@@ -477,7 +539,7 @@ Window {
                     anchors.rightMargin: 0
 
                     Label {
-                        id: labelTopInfo1
+                        id: versionLabel
                         color: "#808080"
                         text: qsTr("v1.2")
                         anchors.left: parent.left
@@ -526,12 +588,14 @@ Window {
                         }
                     }
                 }
+
             }
         }
     }
 
 
     DropShadow{
+        id: mainWindowShadow
         anchors.fill: background
         horizontalOffset: 0
         verticalOffset: 0

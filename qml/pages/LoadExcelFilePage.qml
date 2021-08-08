@@ -6,12 +6,19 @@ import QtQuick.Layouts 1.15
 import "../controls"
 
 Item {
+
     Rectangle{
         id: excelFilePageContent
         color: "#F8FBFF"
         anchors.fill: parent
 
         Rectangle {
+
+            property string hoveredBtn: "../../images/svg/folder (3).svg"
+            property string noHoveredBtn: "../../images/svg/folder (5).svg"
+            property bool isEntered: false
+
+
             id: fileOpenBg
             width: 500
             color: "#ffffff"
@@ -24,17 +31,22 @@ Item {
             anchors.rightMargin: 100
             anchors.leftMargin: 100
             anchors.topMargin: 30
-            border.color: "#808080"
-            border.width: 1
+//            border.color: "#808080"
+//            border.width: 1
             radius: 5
-            property string hoveredBtn: "../../images/svg/folder (3).svg"
-            property string noHoveredBtn: "../../images/svg/folder (5).svg"
-            property bool isEntered: false
 
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: 0
+                verticalOffset: 0
+                radius: 10
+                samples: 21
+                color: "#66000000"
+            }
 
             Button {
                 id: fileOpenBtn
-
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: parent.top
@@ -87,10 +99,17 @@ Item {
                     color: "#808080"
                     text: qsTr("Click or drop file here")
                     anchors.bottom: parent.bottom
-                    font.pointSize: 12
+                    font.pointSize: {
+                        if(excelFilePageContent.width<1000) return 10
+                        else return 12
+                    }
+
                     minimumPixelSize: 12
                     anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.bottomMargin: 5
+                    anchors.bottomMargin: {
+                        if(excelFilePageContent.width<1000) return 5
+                        else return 15
+                    }
                 }
                 FileDialog {
                     id: fileOpen
@@ -119,7 +138,8 @@ Item {
                     onEntered: {
                         if(drag.urls.length>1){
                             drag.accepted = false
-                            fileConfirmationText.showHideFileStatus(2)
+//                            fileConfirmationText.showHideFileStatus(2)
+                            notificationBar.callNotification("#CCFF5252", "Drop only one excel file!")
                             return
                         }
                         if(validateFileExtension(drag.urls[0]))
@@ -128,7 +148,8 @@ Item {
                             return // drag accepted
                         }
                         else{           //if not accepted (file type not matched)
-                            fileConfirmationText.showHideFileStatus(3)
+//                            fileConfirmationText.showHideFileStatus(3)
+                            notificationBar.callNotification("#CCFF5252", "Only excel file allowed!")
                             drag.accepted = false
                         }
 
@@ -176,57 +197,58 @@ Item {
             Layout.preferredHeight: 40
             onClicked: {
                 visible = false
-                fileConfirmationText.showHideFileStatus(1)
-                backend.excelTest("file saved")
+//                fileConfirmationText.showHideFileStatus(1)
+                notificationBar.callNotification("#72B58D", "File saved successfully!")
+//                backend.excelTest("file saved")
                 print("file saved")
             }
         }
 
-        Label {
-            id: fileConfirmationText
-            visible: false
-            text: qsTr("")
-            anchors.left: parent.left
-            anchors.top: fileOpenBg.bottom
-            anchors.leftMargin: 100
-            font.italic: true
-            anchors.topMargin: 10
-            font.pointSize: {
-                if(excelFilePageContent.width>1350) return 12
-                else if(excelFilePageContent.width>1000) return 11
-                else return 10
-            }
+//        Label {
+//            id: fileConfirmationText
+//            visible: false
+//            text: qsTr("")
+//            anchors.left: parent.left
+//            anchors.top: fileOpenBg.bottom
+//            anchors.leftMargin: 100
+//            font.italic: true
+//            anchors.topMargin: 10
+//            font.pointSize: {
+//                if(excelFilePageContent.width>1350) return 12
+//                else if(excelFilePageContent.width>1000) return 11
+//                else return 10
+//            }
 
-            PropertyAnimation {
-                id: showHideFileConfirmationText
-                running: true
-                target: fileConfirmationText
-                property: 'visible'
-                to: false
-                duration: 3000 // turns to false after 3000 ms
-            }
-            function showHideFileStatus(flag){
-                if(flag===1){
-                    text = qsTr("File saved successfully!")
-                    color = "#13805A"
-                }
-                else if(flag===2){
-                    text = qsTr("Choose only one file!")
-                    color = "#FF5252"
-                }
-                else if(flag===3){
-                    text = qsTr("Only excel file allowed!")
-                    color = "#FF5252"
-                }
-                else{
-                    text = qsTr("Can't save file!")
-                    color = "#FF5252"
-                }
+//            PropertyAnimation {
+//                id: showHideFileConfirmationText
+//                running: true
+//                target: fileConfirmationText
+//                property: 'visible'
+//                to: false
+//                duration: 3000 // turns to false after 3000 ms
+//            }
+//            function showHideFileStatus(flag){
+//                if(flag===1){
+//                    text = qsTr("File saved successfully!")
+//                    color= "#13805A"
+//                }
+//                else if(flag===2){
+//                    text = qsTr("Choose only one file!")
+//                    color = "#FF5252"
+//                }
+//                else if(flag===3){
+//                    text = qsTr("Only excel file allowed!")
+//                    color = "#FF5252"
+//                }
+//                else{
+//                    text = qsTr("Can't save file!")
+//                    color = "#FF5252"
+//                }
 
-                visible = true
-                showHideFileConfirmationText.start()
-            }
-        }
+//                visible = true
+//                showHideFileConfirmationText.start()
+//            }
+//        }
 
 
     }
