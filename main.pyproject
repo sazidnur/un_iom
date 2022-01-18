@@ -1,3 +1,3 @@
 {
-    "files": ["qml/controls/ToggleButton.qml","qml/pages/LoadExcelFilePage.qml","qml/controls/Form.ui","qml/controls/CustomSearchBar.qml","qml/controls/TestChart.qml","qml/pages/HomePage.qml","qml/controls/DashboardBox.qml","qml/controls/CustomButton.qml","qml/controls/testingGraph.qml","qml/controls/Hello.ui","main.qml","main.py","qml/pages/SettingsPage.qml","qml/controls/TopBarButton.qml","qml/pages/aSDAD.qml","qml/controls/FileOpenButton.qml"]
+    "files": ["qml/controls/CustomSearchBar.qml","qml/controls/ToggleButton.qml","modules/reportData.py","main.py","qml/controls/FileOpenButton.qml","qml/pages/aSDAD.qml","qml/pages/SettingsPage.qml","qml/controls/Form.ui","qml/controls/DashboardBox.qml","qml/controls/testingGraph.qml","qml/controls/TopBarButton.qml","qml/pages/LoadExcelFilePage.qml","qml/controls/TestChart.qml","python/ProcessData.py","main.qml","qml/controls/CustomButton.qml","qml/pages/HomePage.qml","qml/controls/Hello.ui","qml/pages/analysis.qml"]
 }

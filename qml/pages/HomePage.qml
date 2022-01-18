@@ -12,7 +12,14 @@ Item {
 
 //    property int chart_width: dashChartBg.width
 //    property int chart_height: dashChartBg.height
+    property int reachable: 0
+    property real unreachable: 0
 
+    function refresh(a){
+        data.unreachable = 100
+    }
+
+    id: data
     Rectangle {
         id: homePageContent
         color: "#f8fbff"
@@ -353,8 +360,76 @@ Item {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 50
                     Layout.preferredHeight: 40
+                    visible: false
                     onClicked: {
-                        backend.searchData(searchField.text)
+
+                    }
+                }
+            }
+            ListView {
+                id: searchResult
+                width: searchField.width
+                height: searchField.height
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: dashSearchGrid.bottom
+                clip: true
+                flickableDirection: Flickable.AutoFlickDirection
+                anchors.topMargin: 10
+                focus: true
+                anchors.rightMargin: {
+                    if(homePageContent.width>1300) return 130
+                    else if(homePageContent.width>1000) return 100
+                    else return 10
+                }
+                anchors.leftMargin: {
+                    if(homePageContent.width>1300) return 130
+                    else if(homePageContent.width>1000) return 100
+                    else return 10
+                }
+                header: Rectangle{
+                    anchors {left: parent.left; right: parent.right}
+                    height: 10
+                    color: "pink"
+                }
+                footer: Rectangle{
+                    anchors {left: parent.left; right: parent.right}
+                    height: 10
+                    color: "lightblue"
+                }
+
+                delegate: Item {
+                    Text {
+                        readonly property ListView __lv: ListView.view
+                        width: parent.width
+                        text: model.name
+                        height: 10
+
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: __lv.currentIndex = model.index
+                        }
+                    }
+                }
+                model: ListModel {
+                    ListElement {
+                        uid: "ABC1"
+                        name: "Sazid"
+                    }
+
+                    ListElement {
+                        uid: "ABC1"
+                        name: "Sazid"
+                    }
+
+                    ListElement {
+                        uid: "ABC1"
+                        name: "Sazid"
+                    }
+
+                    ListElement {
+                        uid: "ABC1"
+                        name: "Sazid"
                     }
                 }
             }
@@ -419,7 +494,7 @@ Item {
                         name: "BarSeries"
                         BarSet {
                             values: [2, 2, 3]
-                            label: "Set1"
+                            label: "aaa"
                         }
 
                         BarSet {
@@ -477,20 +552,20 @@ Item {
                     antialiasing: true
 
 //                    PieSeries {
-//                        id: pieSeries
-//                        PieSlice { label: "eaten"; value: 94.9 }
-//                        PieSlice { label: "not yet eaten"; value: 5.1 }
-//                    }
+                    //                        id: pieSeries
+                    //                        PieSlice { label: "eaten"; value: 94.9 }
+                    //                        PieSlice { label: "not yet eaten"; value: 5.1 }
+                    //                    }
                     LineSeries {
-                            name: "LineSeries"
-                            XYPoint { x: 0; y: 0 }
-                            XYPoint { x: 1.1; y: 2.1 }
-                            XYPoint { x: 1.9; y: 3.3 }
-                            XYPoint { x: 2.1; y: 2.1 }
-                            XYPoint { x: 2.9; y: 4.9 }
-                            XYPoint { x: 3.4; y: 3.0 }
-                            XYPoint { x: 4.1; y: 3.3 }
-                        }
+                        name: "LineSeries"
+                        XYPoint { x: 0; y: 0 }
+                        XYPoint { x: 1.1; y: 2.1 }
+                        XYPoint { x: 1.9; y: 3.3 }
+                        XYPoint { x: 2.1; y: 2.1 }
+                        XYPoint { x: 2.9; y: 4.9 }
+                        XYPoint { x: 3.4; y: 3.0 }
+                        XYPoint { x: 4.1; y: 3.3 }
+                    }
                 }
                 ChartView {
                     id: bar3
@@ -503,12 +578,16 @@ Item {
                     anchors.bottomMargin: 0
                     anchors.topMargin: 0
 
-                    theme: ChartView.ChartThemeQt
+//                    theme: ChartView.ChartThemeQt
                     PieSeries {
-                                            id: pieSeries
-                                            PieSlice { label: "eaten"; value: 94.9 }
-                                            PieSlice { label: "not yet eaten"; value: 5.1 }
-                                        }
+                        id: pieSeries
+                        PieSlice {
+                            id: val1;
+                            label: "Male";
+                            value: 0
+                        }
+                        PieSlice { id: val2; label: "Female"; value: 0 }
+                    }
                 }
             }
 
@@ -518,14 +597,12 @@ Item {
     Connections{
         target: backend
 
-        function onSetSearch(query){
-            midBoxdescription.text = query
+        function onSetFrontendData(json_string){
+            const data = JSON.parse(json_string)
+            val1.value = data.male
+            val2.value = data.female
         }
     }
 }
 
-/*##^##
-Designer {
-    D{i:0;autoSize:true;height:480;width:800}
-}
-##^##*/
+

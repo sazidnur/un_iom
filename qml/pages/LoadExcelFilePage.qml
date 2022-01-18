@@ -3,6 +3,8 @@ import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.15
 import QtQuick.Dialogs 1.3
 import QtQuick.Layouts 1.15
+import QtQuick.Controls.Styles 1.4
+//import Qt.labs.platform 1.1
 import "../controls"
 
 Item {
@@ -17,7 +19,12 @@ Item {
             property string hoveredBtn: "../../images/svg/folder (3).svg"
             property string noHoveredBtn: "../../images/svg/folder (5).svg"
             property bool isEntered: false
+            property string lastFilePath: ""
 
+            function showSaveBtn(){
+                fileSaveProgressBar.visible = true
+                btnSaveExcel.visible = false
+            }
 
             id: fileOpenBg
             width: 500
@@ -107,19 +114,23 @@ Item {
                     minimumPixelSize: 12
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottomMargin: {
-                        if(excelFilePageContent.width<1000) return 5
-                        else return 15
+                        if(excelFilePageContent.width<1000) return 4
+                        else if(excelFilePageContent.width<1350) return 30
+                        else return 35
                     }
                 }
                 FileDialog {
                     id: fileOpen
                     title: "Open excel file"
-                    folder: shortcuts.home
+                    folder: fileName(backend.checkLastLoacationOfFolder())
                     selectMultiple: false
                     nameFilters: ["Excel File (*.xlsx)"]
                     onAccepted: {
+                        fileOpenBg.lastFilePath = fileOpen.fileUrl
+                        fileOpenBg.lastFilePath = fileOpenBg.lastFilePath.split("///")[1]
+                        filename.text = fileOpenBg.lastFilePath
+                        print(fileOpenBg.lastFilePath, "okay")
                         btnSaveExcel.visible = true
-                        print("okay")
                     }
                 }
                 onPressed: {
@@ -133,7 +144,8 @@ Item {
                         fileOpenBg.isEntered = false
                         btnSaveExcel.visible = true
                         print(drop.text)
-                        print("file dropped")
+                        fileOpenBg.lastFilePath = drop.text.split("///")[1]
+                        filename.text = fileOpenBg.lastFilePath
                     }
                     onEntered: {
                         if(drag.urls.length>1){
@@ -196,12 +208,39 @@ Item {
             Layout.preferredWidth: 50
             Layout.preferredHeight: 40
             onClicked: {
-                visible = false
-//                fileConfirmationText.showHideFileStatus(1)
-                notificationBar.callNotification("#72B58D", "File saved successfully!")
-//                backend.excelTest("file saved")
-                print("file saved")
+                fileOpenBg.showSaveBtn()
+                backend.checkValidFilePath(fileOpenBg.lastFilePath)
             }
+        }
+
+        ProgressBar {
+            id: fileSaveProgressBar
+            width: {
+                if(excelFilePageContent.width>1350) return 450
+                else return 350
+            }
+
+            visible: false
+            indeterminate: true
+            anchors.verticalCenter: btnSaveExcel.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            //            value: 0.5
+        }
+
+        Label {
+            id: filename
+            text: qsTr("")
+            anchors.left: fileOpenBg.left
+            anchors.top: fileOpenBg.bottom
+            anchors.leftMargin: 0
+            anchors.topMargin: 25
+            color: "#808080"
+            font.pointSize: {
+                if(excelFilePageContent.width<1000) return 8
+                else return 12
+            }
+
+            minimumPixelSize: 12
         }
 
 //        Label {
@@ -255,14 +294,79 @@ Item {
     Connections{
         target: backend
 
-        function onSetData(data){
-            fileUploadLabel.text = data
+        function onSetCheckValidFilePath(flag){
+            fileOpenBg.showSaveBtn()
+            if(!flag){
+                notificationBar.callNotification("#CCFF5252", "File not found!")
+            }
+            else{
+                backend.checkValidExcelFile(fileOpenBg.lastFilePath)
+            }
         }
+
+        function onSetCheckValidExcelFile(flag){
+            if(!flag){
+                notificationBar.callNotification("#CCFF5252", "Invalid Excel file!")
+            }
+            else{
+                btnSaveExcel.visible = false
+                fileSaveProgressBar.visible = true
+                backend.saveExcelFileData(fileOpenBg.lastFilePath)
+            }
+        }
+
+        function onSetSaveExcelFileData(flag){
+            if(!flag){
+                notificationBar.callNotification("#CCFF5252", "Unknown error, Can't save file!")
+                fileSaveProgressBar.visible = false
+                btnSaveExcel.visible = true
+            }
+            else{
+                fileOpenBg.lastFilePath = ""
+                filename.text = ""
+                notificationBar.callNotification("#72B58D", "File saved successfully!")
+                btnSaveExcel.visible = false
+                fileSaveProgressBar.visible = true
+                fileUploadLabel.text = "Processing Data..."
+//                fileDrop.visible = false
+//                fileOpen.visible = false
+                backend.processData()
+            }
+        }
+        function onSetProcessData(flag){
+            if(flag){
+//                notificationBar.callNotification("#72B58D", "Data processed successfully!")
+                fileSaveProgressBar.visible = false
+                fileUploadLabel.text = "Click or drop file here"
+//                fileDrop.visible = true
+//                fileOpen.Ignore = false
+//                fileOpen.visible = true
+                backend.reachable()
+            }
+            else{
+//                notificationBar.callNotification("#CCFF5252", "Can't Process Data! Previous dataset activated.")
+                fileSaveProgressBar.visible = false
+                fileUploadLabel.text = "Click or drop file here"
+//                fileDrop.visible = true
+//                fileOpen.Ignore = false
+//                fileOpen.visible = true
+            }
+
+        }
+
+        function onGetLastLocationOfFolder(path){
+            if(path==="null") return qsTr('file:\\\C')
+            else return path
+        }
+//        function onSetRefreshData(a){
+//            print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+//            data.refresh(a)
+//        }
     }
 }
 
 /*##^##
 Designer {
-    D{i:0;autoSize:true;height:480;width:800}
+    D{i:0;autoSize:true;height:480;width:800}D{i:15}
 }
 ##^##*/

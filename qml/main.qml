@@ -352,6 +352,7 @@ Window {
                                 btnAnalysis.isActiveMenu = true
                                 btnLoadExcel.isActiveMenu = false
                                 btnHistory.isActiveMenu = false
+                                stackView.push(Qt.resolvedUrl("pages/analysis.qml"))
                             }
                         }
 
@@ -409,7 +410,7 @@ Window {
                             btnAnalysis.isActiveMenu = false
                             btnLoadExcel.isActiveMenu = false
                             btnHistory.isActiveMenu = false
-                            stackView.push(Qt.resolvedUrl("pages/SettingsPage.qml"))
+                            stackView.push(Qt.resolvedUrl("pages/aSDAD.qml"))
                         }
                     }
 
@@ -667,6 +668,14 @@ Window {
             onActiveChanged: if(active){
                                  mainWindow.startSystemResize(Qt.BottomEdge)
                              }
+        }
+    }
+
+    Connections{
+        target: backend
+
+        function onPrintTime(time){
+            labelTopInfo.text = time
         }
     }
 
