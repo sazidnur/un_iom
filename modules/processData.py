@@ -4,9 +4,10 @@ import numpy as np
 import time
 import json
 from modules import reportData
+#import main
 
 report= reportData.DataClass()
-
+#mainClass = MainWindow()
 class DataClass:
     df = pd.DataFrame()
     data = dict()
@@ -41,6 +42,9 @@ class DataClass:
         return "null"
 
     def process(self):
+        if self.df.columns[0] != 'SL':
+#            print("ssssssssssssss")
+            return False
         reachable = 0
         male = 0
         female = 0
@@ -161,8 +165,11 @@ class DataClass:
 #        print(self.report["reachable"])
 #        print(self.report["unreachable"])
 
-        with open("data.json", "w") as outfile:
-            json.dump(self.data, outfile)
+        try:
+            with open("data.json", "w") as outfile:
+                json.dump(self.data, outfile)
+        except:
+            return False
 
         with open("report.json", "w") as outfile:
             json.dump(self.report, outfile)

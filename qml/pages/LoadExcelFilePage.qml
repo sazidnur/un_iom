@@ -335,8 +335,9 @@ Item {
             }
         }
         function onSetProcessData(flag){
+            print(flag)
             if(flag){
-//                notificationBar.callNotification("#72B58D", "Data processed successfully!")
+                notificationBar.callNotification("#72B58D", "Data processed successfully!")
                 fileSaveProgressBar.visible = false
                 fileUploadLabel.text = "Click or drop file here"
 //                fileDrop.visible = true
@@ -345,7 +346,7 @@ Item {
                 backend.reachable()
             }
             else{
-//                notificationBar.callNotification("#CCFF5252", "Can't Process Data! Previous dataset activated.")
+                notificationBar.callNotification("#CCFF5252", "Can't Process Data!")
                 fileSaveProgressBar.visible = false
                 fileUploadLabel.text = "Click or drop file here"
 //                fileDrop.visible = true
