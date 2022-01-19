@@ -226,7 +226,7 @@ Window {
                     Label {
                         id: title
                         color: "#333333"
-                        text: qsTr("QPack")
+                        text: qsTr("Returnee Status Tracker")
                         anchors.left: iconApp.right
                         anchors.right: parent.right
                         anchors.top: parent.top

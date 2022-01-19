@@ -29,6 +29,7 @@ class MainWindow(QObject):
         self.timer.timeout.connect(lambda: self.setTime())
         self.timer2.timeout.connect(lambda: self.reachable())
         self.timer2.timeout.connect(lambda: self.frontendData())
+        self.timer2.timeout.connect(lambda: self.staticData())
         self.timer.start(1000)
         self.timer2.start(1000)
 #        self.reachable()
@@ -41,11 +42,18 @@ class MainWindow(QObject):
     setProcessData = Signal(bool)
     setRefreshData = Signal(int, int)
     setFrontendData = Signal(str)
+    setStaticData = Signal(str)
 
     def setTime(self):
         now = datetime.datetime.now()
         fomatdate = now.strftime("%A, %I:%M:%S %p, %d-%b-%Y")
         self.printTime.emit(fomatdate)
+
+    @Slot()
+    def staticData(self):
+#        print(report.getStatic())
+        data = report.getStatic()
+        self.setStaticData.emit(data)
 
     @Slot(str)
     def checkValidExcelFile(self, path):
@@ -70,6 +78,10 @@ class MainWindow(QObject):
     @Slot()
     def processData(self):
         self.setProcessData.emit(data.process())
+
+    @Slot()
+    def updateSearchCount(self):
+        report.updateSearchCnt()
 
     @Slot()
     def reachable(self):

@@ -360,79 +360,79 @@ Item {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 50
                     Layout.preferredHeight: 40
-                    visible: false
+                    visible: true
                     onClicked: {
-
+                        backend.updateSearchCount()
                     }
                 }
             }
-            ListView {
-                id: searchResult
-                width: searchField.width
-                height: searchField.height
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.top: dashSearchGrid.bottom
-                clip: true
-                flickableDirection: Flickable.AutoFlickDirection
-                anchors.topMargin: 10
-                focus: true
-                anchors.rightMargin: {
-                    if(homePageContent.width>1300) return 130
-                    else if(homePageContent.width>1000) return 100
-                    else return 10
-                }
-                anchors.leftMargin: {
-                    if(homePageContent.width>1300) return 130
-                    else if(homePageContent.width>1000) return 100
-                    else return 10
-                }
-                header: Rectangle{
-                    anchors {left: parent.left; right: parent.right}
-                    height: 10
-                    color: "pink"
-                }
-                footer: Rectangle{
-                    anchors {left: parent.left; right: parent.right}
-                    height: 10
-                    color: "lightblue"
-                }
+//            ListView {
+//                id: searchResult
+//                width: searchField.width
+//                height: searchField.height
+//                anchors.left: parent.left
+//                anchors.right: parent.right
+//                anchors.top: dashSearchGrid.bottom
+//                clip: true
+//                flickableDirection: Flickable.AutoFlickDirection
+//                anchors.topMargin: 10
+//                focus: true
+//                anchors.rightMargin: {
+//                    if(homePageContent.width>1300) return 130
+//                    else if(homePageContent.width>1000) return 100
+//                    else return 10
+//                }
+//                anchors.leftMargin: {
+//                    if(homePageContent.width>1300) return 130
+//                    else if(homePageContent.width>1000) return 100
+//                    else return 10
+//                }
+//                header: Rectangle{
+//                    anchors {left: parent.left; right: parent.right}
+//                    height: 10
+//                    color: "pink"
+//                }
+//                footer: Rectangle{
+//                    anchors {left: parent.left; right: parent.right}
+//                    height: 10
+//                    color: "lightblue"
+//                }
 
-                delegate: Item {
-                    Text {
-                        readonly property ListView __lv: ListView.view
-                        width: parent.width
-                        text: model.name
-                        height: 10
+//                delegate: Item {
+//                    Text {
+//                        readonly property ListView __lv: ListView.view
+//                        width: parent.width
+//                        text: model.name
+//                        height: 10
 
-                        MouseArea{
-                            anchors.fill: parent
-                            onClicked: __lv.currentIndex = model.index
-                        }
-                    }
-                }
-                model: ListModel {
-                    ListElement {
-                        uid: "ABC1"
-                        name: "Sazid"
-                    }
+//                        MouseArea{
+//                            anchors.fill: parent
+//                            onClicked: __lv.currentIndex = model.index
+//                        }
+//                    }
+//                }
+//                model: ListModel {
+//                    ListElement {
+//                        uid: "ABC1"
+//                        name: "Sazid"
+//                    }
 
-                    ListElement {
-                        uid: "ABC1"
-                        name: "Sazid"
-                    }
+//                    ListElement {
+//                        uid: "ABC1"
+//                        name: "Sazid"
+//                    }
 
-                    ListElement {
-                        uid: "ABC1"
-                        name: "Sazid"
-                    }
+//                    ListElement {
+//                        uid: "ABC1"
+//                        name: "Sazid"
+//                    }
 
-                    ListElement {
-                        uid: "ABC1"
-                        name: "Sazid"
-                    }
-                }
-            }
+//                    ListElement {
+//                        uid: "ABC1"
+//                        name: "Sazid"
+//                    }
+//                }
+//            }
         }
 
         Rectangle {
@@ -601,6 +601,14 @@ Item {
             const data = JSON.parse(json_string)
             val1.value = data.male
             val2.value = data.female
+        }
+
+        function onSetStaticData(json_string){
+//            print(json_string)
+            const data = JSON.parse(json_string)
+            leftBoxnumber.text = data.people
+            rightBoxnumber.text = data.searchCnt
+            midBoxnumber.text = data.fileCnt
         }
     }
 }

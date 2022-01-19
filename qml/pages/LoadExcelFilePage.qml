@@ -130,6 +130,7 @@ Item {
                         fileOpenBg.lastFilePath = fileOpenBg.lastFilePath.split("///")[1]
                         filename.text = fileOpenBg.lastFilePath
                         print(fileOpenBg.lastFilePath, "okay")
+//                        backend.checkValidExcelFile(fileOpenBg.lastFilePath)
                         btnSaveExcel.visible = true
                     }
                 }

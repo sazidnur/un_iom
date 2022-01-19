@@ -21,3 +21,34 @@ class DataClass:
 
     def getData(self):
         return self.check
+
+    def updatePeople(self, value):
+        with open("static.json", "r") as outfile:
+            temp = json.load(outfile)
+        temp["people"] = str(value)
+        with open("static.json", "w") as outfile:
+            json.dump(temp, outfile)
+
+    def updateSearchCnt(self):
+        with open("static.json", "r") as outfile:
+            temp = json.load(outfile)
+        temp["searchCnt"] = str(int(temp["searchCnt"]) + 1)
+        with open("static.json", "w") as outfile:
+            json.dump(temp, outfile)
+
+    def updateFileCnt(self):
+        with open("static.json", "r") as outfile:
+            temp = json.load(outfile)
+        temp["fileCnt"] = str(int(temp["fileCnt"]) + 1)
+        with open("static.json", "w") as outfile:
+            json.dump(temp, outfile)
+
+
+    def getStatic(self):
+        temp = str()
+        with open("static.json", "r") as outfile:
+            data = json.load(outfile)
+            temp = json.dumps(data)
+
+#        print(temp[0])
+        return temp
