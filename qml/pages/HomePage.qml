@@ -4,9 +4,6 @@ import QtQuick.Layouts 1.15
 import QtGraphicalEffects 1.15
 import QtCharts 2.3
 import "../controls"
-import "../../js/QMLChartData.js" as ChartsData
-import "../../js/QChartJsTypes.js" as ChartTypes
-import "../../js/Chart.js" as Chart
 
 Item {
 
